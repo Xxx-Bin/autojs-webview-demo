@@ -1,7 +1,9 @@
 # autojs webview demo
->autojs webview demo for Android_call_webview_js and webview_call_Android_fun
+>autojs webview demo
+webview 中调用 安卓函数，支持异步返回
+安卓中调用webview js
 
-##Android_call_webview_js
+## Android_call_webview_js
 ```
 1、 index.html
 
@@ -14,7 +16,7 @@
 Gevent.emit('webviewRunJs','Android_call_webview_js("hi ,call by Android '+ random()+'")')
 ```
 
-##webview_call_Android_fun
+## webview_call_Android_fun
 ```
 1、bridgeHandler.js 
 module.exports = {
@@ -36,7 +38,7 @@ function toastAction(params) {
     },
 ```
 
-##webview_call_Android_fun_asyn
+## webview_call_Android_fun_asyn
 
 ```
 1、bridgeHandler.js  
@@ -68,5 +70,5 @@ function asyn_return(){
 })
 ```
 
-##thinks 
+## thinks 
 [github:710850609/autojs-webView](https://github.com/710850609/autojs-webView)
