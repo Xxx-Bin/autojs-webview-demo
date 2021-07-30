@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>autojs-webview-demo</title>
+    <style>
+        body{
+            overflow: hidden;
+        }
+        #app{
+            overflow-y: scroll;
+        }
+        *{
+            box-sizing: border-box;
+        }
+        .btn{
+            width: 100%;
+            height: 200px;
+            margin-bottom: 100px;
+            background-color: #999;
+            color: #fff;
+            padding: 30px 0;
+            font-size: 1rem;
+            word-wrap: break-word;
+            text-align: center;
+        }
+        .btn:active{
+            opacity: .6;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+   <div v-show="!jsbridge">jsbridge on ready</div>
+   <div  v-show="jsbridge">
+    <div class='btn' @click='call_Android_func_toast'>
+        call_Android_func_toast
+    </div>
+    <div  class='btn' @click='call_Android_func_asyn_return'>
+        to_call_Android_call_webview_asyn<br/>
+        call_time {{Android_call_webview_call_time}}<br/>
+        return_time {{Android_call_webview_return_time}}<br/>
+        return_data {{Android_call_webview_return_data}}
+    </div>
+    <div  class='btn' >
+        Android_call_webview_js be call at<br/>
+        {{Android_call_webview_js_time}}<br/>
+        msg:{{Android_call_webview_js_msg}}
+
+    </div>
+   </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script>
+var app = new Vue({
+    el: '#app',
+    data:{
+        jsbridge:false,
+        Android_call_webview_call_time:"",
+        Android_call_webview_return_time:"",
+        Android_call_webview_return_data:"",
+        Android_call_webview_js_time:"",
+        Android_call_webview_js_msg:"",
+    },
+    methods: {
+        init(){
+            this.jsbridge= true
+        },
+        call_Android_func_toast(){
+            window.Android.invoke('toast',{msg:'call by webview js '},()=>{
+                
+            })
+        },
+        Android_call_webview_js(msg){
+            this.Android_call_webview_js_time = (new Date()).toISOString()
+            this.Android_call_webview_js_msg = msg
+        },
+        call_Android_func_asyn_return(){
+            that = this
+            this.Android_call_webview_call_time =(new Date()).toISOString()
+            window.Android.invoke('asyn_return',{},(ret)=>{
+                this.Android_call_webview_return_time = (new Date()).toISOString()
+                that.Android_call_webview_return_data = ret
+            })
+        }
+    },
+    mounted(){
+        window.Android_call_webview_js = this.Android_call_webview_js
+      },
+      created: function () {
+          let that = this
+          window.addEventListener("bridgeinit", function () {
+            setTimeout(function(){
+                that.init()
+            },1000)
+          }, false);
+      },
+})
+</script>
+</body>
+</html>
